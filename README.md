@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/abti.png" alt="Abti illustration" width="420">
+  <img src="assets/abti.png" alt="Abti illustration" width="252">
 </p>
 
 # Abti
