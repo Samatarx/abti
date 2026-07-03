@@ -34,6 +34,8 @@ Abti:
 - Does not store code
 - Does not store summaries
 - Does not store learning tags
+- Does not upload anything
+- Does not track the user
 - Only uses the current session context
 
 It should not include secrets, credentials, tokens, customer data, or sensitive company information in a debrief.
@@ -82,6 +84,48 @@ You can also invoke it directly with:
 
 Direct invocation counts as consent. If there is enough session context, Abti generates the debrief. If not, it asks for a diff, PR summary, files changed, or a short task summary first.
 
+## Optional end-of-session reminders
+
+Abti is usually invoked by the assistant when it notices that you are wrapping up a coding session.
+
+Sometimes the model can miss that moment.
+
+You can always invoke Abti manually:
+
+```text
+/abti
+```
+
+For Claude Code users, Abti can also be paired with an optional `Stop` hook that prints a reminder at the end of coding sessions with recent git activity.
+
+The hook does not store anything.
+
+It does not upload anything.
+
+It does not read file contents.
+
+It does not analyse prompts or code.
+
+It only checks whether the current directory is a git repo with recent changes or recent commits, then prints a reminder.
+
+Example reminder:
+
+```text
+Abti: session ending — if this work is heading to a PR, commit, or branch, ask whether the user wants an Abti learning debrief.
+```
+
+Example Claude Code hook command:
+
+```sh
+git -C "$CLAUDE_PROJECT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 \
+  && [ -n "$(git -C "$CLAUDE_PROJECT_DIR" status --porcelain 2>/dev/null)$(git -C "$CLAUDE_PROJECT_DIR" log --oneline -3 --since='8 hours ago' 2>/dev/null)" ] \
+  && echo "Abti: session ending — if this work is heading to a PR, commit, or branch, ask whether the user wants an Abti learning debrief."
+```
+
+This is optional. Abti still works without hooks by manually invoking `/abti` or by asking for a PR summary, commit message, branch name, diff summary, release note, or final review.
+
+For non-Claude tools, use the generic prompt or adapter-specific instructions. Any reminder should remain optional and privacy-preserving.
+
 ## Example trigger phrases
 
 - “Write a PR summary”
@@ -96,7 +140,6 @@ Direct invocation counts as consent. If there is enough session context, Abti ge
 - Cursor rules
 - Windsurf rules
 - OpenCode support
-- Optional dashboard later
 
 ## License
 

@@ -17,7 +17,7 @@ Avoid school-report, corporate-review, surveillance, or overhyped language. Pref
 
 ## Privacy
 
-Abti stores nothing: no prompts, code, summaries, history, or tags.
+Abti stores nothing: no prompts, code, summaries, history, or learning tags.
 
 Do not claim to remember, save, upload, track, log, analyse in the background, or send anything anywhere. Use only the current conversation or session context.
 
@@ -48,6 +48,40 @@ If there is not enough context, ask for the diff, PR summary, files changed, or 
 Suggested wording:
 
 > I can run the Abti debrief, but I need a bit more context. Share the diff, the files changed, or a short summary of what changed this session.
+
+## Optional End-of-Session Reminder
+
+Abti is model-invoked, so it may not always trigger automatically. The assistant can miss PR-ready moments.
+
+For Claude Code, the user may optionally install a `Stop` hook. The hook should only print a reminder at the end of relevant coding sessions. It must not store, log, upload, or analyse anything.
+
+Only offer this after one of these events:
+
+- Abti has just produced a debrief
+- The user asks why Abti did not trigger
+- The user asks how to make Abti trigger more reliably
+
+Before offering, check whether an Abti `Stop` hook is already configured in the relevant Claude Code settings file. If it already exists, do not offer again.
+
+When offering, say:
+
+> Want Abti to remind you at the end of future coding sessions? I can add a small Claude Code `Stop` hook that prints a reminder when there appears to be recent git activity. It stores nothing and uploads nothing — it only reminds you to ask for a debrief.
+
+Only install the hook if the user agrees.
+
+If the user says no, respect that and do not ask again in the same session.
+
+The hook should stay quiet on non-coding sessions and only print a short reminder when the current directory is a git repository with recent work.
+
+Example hook command:
+
+```sh
+git -C "$CLAUDE_PROJECT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 \
+  && [ -n "$(git -C "$CLAUDE_PROJECT_DIR" status --porcelain 2>/dev/null)$(git -C "$CLAUDE_PROJECT_DIR" log --oneline -3 --since='8 hours ago' 2>/dev/null)" ] \
+  && echo "Abti: session ending — if this work is heading to a PR, commit, or branch, ask whether the user wants an Abti learning debrief."
+```
+
+Privacy still holds: the hook only prints a reminder. It does not store, log, upload, analyse, or inspect file contents.
 
 ## Debrief format
 
