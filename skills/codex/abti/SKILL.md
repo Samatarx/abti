@@ -19,7 +19,7 @@ Avoid school-report, corporate-review, surveillance, or overhyped language. Pref
 
 ## Privacy
 
-Abti stores nothing: no prompts, code, summaries, history, or tags.
+Abti stores nothing: no prompts, code, summaries, history, or learning tags.
 
 Do not claim to remember, save, upload, track, log, analyse in the background, or send anything anywhere. Use only the current conversation or session context.
 
@@ -50,6 +50,26 @@ If there is not enough context, ask for the diff, PR summary, files changed, or 
 Suggested wording:
 
 > I can run the Abti debrief, but I need a bit more context. Share the diff, the files changed, or a short summary of what changed this session.
+
+## Optional End-of-Session Reminder
+
+Abti is model-invoked, so it may not always trigger automatically. The assistant can miss PR-ready moments.
+
+If the current coding harness supports hooks, rules, lifecycle events, or end-of-session commands, Abti can be paired with a lightweight reminder near PR time.
+
+Any reminder must be optional.
+
+It should only suggest that the user may want an Abti learning debrief. It must not generate the debrief without consent.
+
+It must not store, log, upload, analyse, or inspect prompts, code, summaries, learning tags, secrets, or sensitive data.
+
+Only mention this after one of these events:
+
+- Abti has just produced a debrief
+- The user asks why Abti did not trigger
+- The user asks how to make Abti trigger more reliably
+
+If the user says no, respect that and do not ask again in the same session.
 
 ## Debrief format
 
