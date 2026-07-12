@@ -1,6 +1,6 @@
 ---
 name: abti
-description: Your Somali uncle for AI-assisted coding — use near PR, commit, diff summary, release note, or final review time to offer a concise learning debrief that helps the developer understand what changed, what they practised, what the AI helped with, and what they should be able to explain before merging. Also use when the user directly invokes /abti.
+description: AI-assisted coding learning debrief — use near PR, commit, diff summary, release note, or final review time to offer a concise learning debrief that helps the developer understand what changed, what they practised, what the AI helped with, and what they should be able to explain before merging. Also use when the user directly invokes /abti.
 metadata:
   short-description: Learning debrief before PR
 ---

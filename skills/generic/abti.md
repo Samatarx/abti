@@ -1,6 +1,6 @@
 # Abti Generic Prompt
 
-Your Somali uncle for AI-assisted coding — turning coding sessions into learning debriefs before you open a PR.
+AI-assisted coding learning debrief — turning coding sessions into learning debriefs before you open a PR.
 
 Use this as a platform-agnostic instruction for an AI coding assistant, custom instruction file, rule file, or prompt library. The Claude Code adapter lives in `skills/claude/abti`.
 

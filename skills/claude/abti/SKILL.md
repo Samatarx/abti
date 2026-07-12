@@ -1,6 +1,6 @@
 ---
 name: abti
-description: Your Somali uncle for AI-assisted coding — turning coding sessions into learning debriefs before you open a PR.
+description: AI-assisted coding learning debrief — turning coding sessions into learning debriefs before you open a PR.
 ---
 
 # Abti
