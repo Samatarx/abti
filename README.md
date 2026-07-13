@@ -4,142 +4,237 @@
 
 # Abti
 
-Your helpful uncle for AI-assisted coding — turning coding sessions into learning debriefs before you open a PR.
+AI helps you ship faster. Abti helps you understand what you shipped.
 
-Abti is a lightweight, platform-agnostic coding debrief skill. Near the end of an AI-assisted coding session, it helps you pause and understand what changed, what you practised, what the AI helped with, and what you should be comfortable explaining before you merge.
+A lightweight coding debrief skill that turns AI-assisted coding sessions into learning moments before you open a pull request.
 
-## Origin
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-black.svg"></a>
+  <img alt="No telemetry" src="https://img.shields.io/badge/telemetry-none-black.svg">
+  <img alt="Stateless" src="https://img.shields.io/badge/storage-stateless-black.svg">
+  <img alt="Adapters" src="https://img.shields.io/badge/adapters-Claude%20Code%20%7C%20Codex-black.svg">
+</p>
 
-Abti means “maternal uncle” in Somali.
+## Why Abti exists
 
-The idea is simple: after you use AI to build something, Abti is the helpful uncle who sits with you for a minute and explains what just happened. Warm, practical, honest, and encouraging — not a school report, not a performance review, and not surveillance.
+AI coding assistants help developers produce more code than ever before. That is useful, but it creates a quiet problem: after a fast session, it can be hard to tell what you actually practised, what the assistant solved for you, and whether you could explain the implementation yourself.
 
-## What Abti does
+Abti exists for that moment.
 
-- Summarises what changed
-- Identifies concepts practised
-- Explains what the AI helped with
-- Lists what the developer should understand before merging
-- Asks quick understanding-check questions
-- Suggests one follow-up exercise
-- Produces learning tags
+It does not interrupt your coding flow. It waits until PR time, then offers a short learning debrief based only on the current session context. The goal is simple: help you leave the session with a clearer understanding of the code you are about to share.
 
-## Privacy
+Abti means “maternal uncle” in Somali. The tone is intentionally calm and practical: a helpful senior engineer sitting with you for a minute before you open the pull request.
 
-The free skill is stateless.
+## Example
 
-Abti:
+```md
+# Abti Learning Debrief
 
-- Does not store prompts
-- Does not store code
-- Does not store summaries
-- Does not store learning tags
-- Does not upload anything
-- Does not track the user
-- Only uses the current session context
+## 1. What You Practised
 
-It should not include secrets, credentials, tokens, customer data, or sensitive company information in a debrief.
+- Refactored a React form so validation lives beside the submit flow instead of being spread across event handlers.
+- Tightened TypeScript types around the API response so the UI no longer assumes optional fields are present.
+- Added regression tests for the empty-state and failed-submit paths.
 
-## Platform support
+## 2. What The AI Helped With
 
-Abti is platform-agnostic.
+- Suggested a smaller validation helper and updated the affected call sites.
+- Drafted test cases for the failure path and loading state.
+- Helped identify a stale mock that no longer matched the API contract.
 
-Supported adapters are included for Claude Code and Codex. A generic prompt version is also included for other AI coding tools, custom instruction files, rule files, or prompt libraries.
+## 3. What You Should Understand Before Merging
+
+- Why the validation helper returns structured errors instead of throwing.
+- How the component behaves when the API returns a partial profile.
+- Which tests would fail if the submit button became enabled too early.
+
+## 4. Quick Questions
+
+- What user action triggers validation now?
+- Why is `ProfileResponse.email` treated as optional?
+- Which test protects the failed-submit path?
+
+Try answering these yourself first. I can check your answers if you want.
+
+## 5. Things To Double-Check
+
+- Confirm the disabled button state still works with keyboard submission.
+- Re-run the form tests after rebasing onto the latest API changes.
+
+## 6. One Follow-Up Exercise
+
+Write one additional test for a slow network response where the user edits the form while submission is pending.
+
+## 7. Learning Tags
+
+React, TypeScript, form validation, API contracts, regression testing, accessibility
+
+Nothing was stored — this debrief lives only in this session.
+```
+
+## Features
+
+- PR-time learning debriefs that help you understand what changed before merging.
+- Current-session only: Abti uses the current session context and does not rely on saved history.
+- Stateless by design.
+- Works with Claude Code.
+- Works with Codex.
+- Generic prompt included for other AI coding assistants, rule files, and prompt libraries.
+- Privacy-first: no uploads, no storage, no telemetry, no phone-home behaviour.
+- Asks before generating a learning debrief during normal PR wrap-up.
+- Direct invocation with `/abti` when you want a learning debrief immediately.
 
 ## Installation
 
-### Codex
-
-Copy the Codex skill into your local Codex skills directory:
-
-```bash
-mkdir -p ~/.codex/skills
-cp -R skills/codex/abti ~/.codex/skills/abti
-```
-
-Then restart Codex so it can load the skill.
+From a local checkout of this repository, copy the adapter for your coding assistant.
 
 ### Claude Code
-
-Copy the Claude Code skill into your local Claude skills directory:
 
 ```bash
 mkdir -p ~/.claude/skills
 cp -R skills/claude/abti ~/.claude/skills/abti
 ```
 
-Then restart Claude Code so it can load the skill.
+Restart Claude Code so it can load the skill.
+
+### Codex
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R skills/codex/abti ~/.codex/skills/abti
+```
+
+Restart Codex so it can load the skill.
+
+### Generic Prompt
+
+Use the generic prompt when your assistant supports custom instructions, project rules, prompt libraries, or reusable snippets.
+
+```bash
+cat skills/generic/abti.md
+```
+
+Copy the contents of `skills/generic/abti.md` into the relevant instruction or rules location for your tool.
 
 ## Usage
 
-During normal coding, Abti stays out of the way. It should not interrupt implementation, debugging, refactoring, or test-writing.
+Normal flow:
 
-Near PR time, when you are preparing a PR summary, commit message, branch name, diff summary, release note, or final review, Abti asks whether you want a learning debrief.
+```text
+Code with your AI assistant
+↓
+Ask for a PR summary, commit message, diff summary, release note, or final review
+↓
+Abti offers a learning debrief
+↓
+You choose whether to generate it
+↓
+Nothing is stored
+```
 
-You can also invoke it directly with:
+Abti stays quiet during implementation, debugging, refactoring, and test-writing. If you ask for a PR summary, it should help with the PR summary first, then ask whether you want an Abti learning debrief too.
+
+Direct invocation:
 
 ```text
 /abti
 ```
 
-Direct invocation counts as consent. If there is enough session context, Abti generates the debrief. If not, it asks for a diff, PR summary, files changed, or a short task summary first.
+Direct invocation counts as consent. If there is enough current session context, Abti generates the learning debrief immediately. If there is not enough context, it asks for a diff, PR summary, files changed, or a short task summary.
 
-## Optional end-of-session reminders
+## How it works
 
-Abti is usually invoked by the assistant when it notices that you are wrapping up a coding session.
-
-Sometimes the model can miss that moment.
-
-You can always invoke Abti manually:
+Abti is a small instruction set for AI coding assistants:
 
 ```text
-/abti
+Developer
+↓
+Coding assistant
+↓
+Abti
+↓
+Learning debrief
 ```
 
-For Claude Code users, Abti can also be paired with an optional `Stop` hook that prints a reminder at the end of coding sessions with recent git activity.
+It intentionally sits after implementation instead of during it. During coding, your assistant should focus on helping you build. Near PR time, Abti helps you pause and understand what happened.
 
-The hook does not store anything.
+Read more in [docs/architecture.md](docs/architecture.md) and [docs/behaviour.md](docs/behaviour.md).
 
-It does not upload anything.
+## Privacy
 
-It does not read file contents.
+Abti is privacy-first because learning debriefs only work when developers trust the tool.
 
-It does not analyse prompts or code.
+Abti does **not**:
 
-It only checks whether the current directory is a git repo with recent changes or recent commits, then prints a reminder.
+- Upload prompts.
+- Upload code.
+- Store code.
+- Store prompts.
+- Store learning history.
+- Store learning tags.
+- Phone home.
+- Include telemetry.
+- Analyse anything in the background.
 
-Example reminder:
+Everything happens inside the current session context. If sensitive information appears in the session, Abti should exclude it from the learning debrief and briefly warn you.
 
-```text
-Abti: session ending — if this work is heading to a PR, commit, or branch, ask whether the user wants an Abti learning debrief.
-```
+Read the full privacy notes in [docs/privacy.md](docs/privacy.md).
 
-Example Claude Code hook command:
+## FAQ
 
-```sh
-git -C "$CLAUDE_PROJECT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1 \
-  && [ -n "$(git -C "$CLAUDE_PROJECT_DIR" status --porcelain 2>/dev/null)$(git -C "$CLAUDE_PROJECT_DIR" log --oneline -3 --since='8 hours ago' 2>/dev/null)" ] \
-  && echo "Abti: session ending — if this work is heading to a PR, commit, or branch, ask whether the user wants an Abti learning debrief."
-```
+### Why doesn’t Abti save anything?
 
-This is optional. Abti still works without hooks by manually invoking `/abti` or by asking for a PR summary, commit message, branch name, diff summary, release note, or final review.
+Because the first version is meant to be trusted, lightweight, and easy to reason about. Abti helps you understand the current session, then leaves no learning history behind.
 
-For non-Claude tools, use the generic prompt or adapter-specific instructions. Any reminder should remain optional and privacy-preserving.
+### Why isn’t it automatic?
 
-## Example trigger phrases
+Because a learning debrief should be a choice. Abti asks before generating one during PR wrap-up and only runs immediately when you invoke `/abti` directly.
 
-- “Write a PR summary”
-- “Create a commit message”
-- “Summarise this diff”
-- “Is this ready to push?”
-- “Help me prepare this PR”
+### Can I use it outside Claude Code?
+
+Yes. Use the generic prompt in `skills/generic/abti.md` with any assistant that supports reusable instructions or rules.
+
+### Can I use it with Codex?
+
+Yes. A Codex adapter is included in `skills/codex/abti`.
+
+### Can I use it with Cursor?
+
+Not as a dedicated adapter yet. You can use the generic prompt today, and Cursor support is on the roadmap.
+
+### Why ask before generating the debrief?
+
+Consent keeps Abti from becoming noise. It also reinforces the privacy model: the debrief is generated only when you ask for it or agree to it.
+
+### Will there be a dashboard?
+
+Possibly, but not in the current lightweight skill. Any future dashboard, sync, or team feature should be opt-in and should not change the default “store nothing” behaviour.
 
 ## Roadmap
 
-- Generic prompt
-- Cursor rules
-- Windsurf rules
-- OpenCode support
+These are future work, not current features:
+
+- Improve adapters.
+- Cursor support.
+- Windsurf support.
+- OpenCode support.
+- Local dashboard.
+- Optional cloud sync.
+- Team features.
+
+## Contributing
+
+Contributions should keep Abti small, clear, and privacy-first.
+
+Good contributions include:
+
+- Clearer installation instructions.
+- Better examples from real software engineering work.
+- Adapter improvements for existing tools.
+- Documentation that makes behaviour and privacy easier to understand.
+- New adapters that preserve consent and statelessness.
+
+Please avoid adding telemetry, analytics, storage, cloud services, dashboards, authentication, or monetisation features in this repository unless they are explicitly scoped as opt-in future work.
 
 ## License
 
