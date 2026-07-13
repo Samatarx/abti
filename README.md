@@ -225,8 +225,6 @@ These are future work, not current features:
 - Windsurf support.
 - OpenCode support.
 - Local dashboard.
-- Optional cloud sync.
-- Team features.
 
 ## Contributing
 
